@@ -5,7 +5,7 @@ from urlparse import urlsplit
 from bs4 import BeautifulSoup
 
 
-def extract():
+def extract(img_tags):
     for img_tag in img_tags:
         try:
             img_src = img_tag['data-src']
