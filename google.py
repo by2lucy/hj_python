@@ -1,7 +1,7 @@
-import urllib2
 from os.path import basename
 from urlparse import urlsplit
 
+import requests
 from bs4 import BeautifulSoup
 
 
@@ -18,19 +18,18 @@ def extract(html):
             img_src = img_tag['src']
             print "download : " + img_src
 
-        img_content = urllib2.urlopen(img_src).read()
+        img_content = requests.get(img_src).content
         img_name = basename(urlsplit(img_src)[2])
 
         with open(img_name,'wb') as _file:
             _file.write(img_content)
 
 
-def get_html():
-    url = "http://www.naver.com"
-    return urllib2.urlopen(url)
+def get_html(url):
+    return requests.get(url).content
 
 
 if __name__ == '__main__':
-    extract(get_html())
+    extract(get_html('http://naver.com'))
     print "Finish"
 
