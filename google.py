@@ -1,31 +1,32 @@
 import urllib2
 from os.path import basename
 from urlparse import urlsplit
+
 from bs4 import BeautifulSoup
 
-url = "http://www.naver.com"
-page = urllib2.urlopen(url)
 
-soup = BeautifulSoup(page)
+def extract():
+    for img_tag in img_tags:
+        try:
+            img_src = img_tag['data-src']
+            print "download : " + img_src
 
-imgTags = soup.findAll('img')
+        except:
+            img_src = img_tag['src']
+            print "download : " + img_src
 
+        img_content = urllib2.urlopen(img_src).read()
+        img_name = basename(urlsplit(img_src)[2])
 
-for imgTag in imgTags:
-	try:
-		imgSrc = imgTag['data-src']
-		print "download : " + imgSrc
+        with open(img_name,'wb') as _file:
+            _file.write(img_content)
 
-	except:
-		imgSrc = imgTag['src']
-		print "download : " + imgSrc
+if __name__ == '__main__':
+    url = "http://www.naver.com"
+    page = urllib2.urlopen(url)
+    soup = BeautifulSoup(page)
+    img_tags = soup.findAll('img')
+    extract(img_tags)
 
-	imgContent = urllib2.urlopen(imgSrc).read()
-	imgName = basename(urlsplit(imgSrc)[2])
+    print "Finish"
 
-	save = open(imgName,'wb')
-	save.write(imgContent)
-	save.close()
-
-
-print "Finish"
