@@ -5,7 +5,10 @@ from urlparse import urlsplit
 from bs4 import BeautifulSoup
 
 
-def extract(img_tags):
+def extract(html):
+    soup = BeautifulSoup(html)
+    img_tags = soup.findAll('img')
+
     for img_tag in img_tags:
         try:
             img_src = img_tag['data-src']
@@ -21,12 +24,13 @@ def extract(img_tags):
         with open(img_name,'wb') as _file:
             _file.write(img_content)
 
-if __name__ == '__main__':
-    url = "http://www.naver.com"
-    page = urllib2.urlopen(url)
-    soup = BeautifulSoup(page)
-    img_tags = soup.findAll('img')
-    extract(img_tags)
 
+def get_html():
+    url = "http://www.naver.com"
+    return urllib2.urlopen(url)
+
+
+if __name__ == '__main__':
+    extract(get_html())
     print "Finish"
 
